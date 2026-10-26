@@ -1,0 +1,96 @@
+<!-- ADD-A-BOOK PAGE template (its logic is in book-form.ts) -->
+
+<a class="back-link" routerLink="/books">← Back to books</a>
+
+<section class="card form-card">
+    <h1>Add a new book ✍️</h1>
+
+    <!--
+      [formGroup]="form"     -> connect this <form> to the "form" object in book-form.ts
+      (ngSubmit)="submit()"  -> Angular's "form was sent" event: run submit(). It also stops the page from reloading.
+      novalidate             -> turn off the browser's own pop-up warnings; we show our own messages instead
+    -->
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <!--
+          Every field follows the same pattern:
+            formControlName="title"   -> connect this input to the "title" field of the form
+            errorFor('title')         -> the message for this field (or null), from book-form.ts.
+                                         "as message" gives it a short name; it is only shown when there is one.
+        -->
+        <label>
+            Title
+            <input formControlName="title" />
+            @if (errorFor('title'); as message) {
+                <small class="field-error">{{ message }}</small>
+            }
+        </label>
+
+        <label>
+            Author
+            <input formControlName="author" />
+            @if (errorFor('author'); as message) {
+                <small class="field-error">{{ message }}</small>
+            }
+        </label>
+
+
+
+
+        <!--
+          Genre dropdown.
+          [ngValue] lets an option hold a real value (a number, or null). With a plain value="..." the form
+          would get TEXT like "2" instead of the number 2.
+          The first option holds null and is disabled, so "Choose a genre" can't be picked as an answer.
+        -->
+        <label>
+            Genre
+            <select formControlName="categoryId" >
+
+                <option [ngValue]="null" disabled> Choose a genre</option>
+                @for (category of categories(); track category.id) {
+                    <option [ngValue]="category.id"> {{ category.name }} </option>
+                }
+            </select>
+            @if (errorFor('categoryId'); as message) {
+                <small class="field-error"> {{ message }}</small>
+            }
+        </label>
+
+        <!-- type="number" -> the form receives a number, not text. step="0.01" allows cents. -->
+        <div class="row">
+            <label>
+                Price (RM)
+                <input type="number" min="0" step="0.01" formControlName="price" />
+                @if (errorFor('price'); as message) {
+                    <small class="field-error"> {{ message }}</small>
+                }
+            </label>
+
+            <label>
+                Copies in stock
+                <input type="number" min="0" step="1" formControlName="stockQuantity" />
+                @if (errorFor('stockQuantity'); as message) {
+                    <small class="field-error"> {{ message }}</small>
+                }
+            </label>
+        </div>
+
+            <label>
+                Short Description
+                <textarea rows="4" formControlName="description"></textarea>
+                @if (errorFor('description'); as message) {
+                    <small class="field-error"> {{ message }}</small>
+                }
+            </label>
+
+            <!-- The general message from the backend (or "Could not save the book..."), only when there is one -->
+            @if(generalError()) {
+                <p class="notice error"> {{ generalError() }}</p>
+            }
+
+            <!-- Disabled while saving, so the same book can't be sent twice. The text changes while saving. -->
+            <button class="btn btn-primary" type="submit" [disabled]="saving()">
+                {{ saving() ? 'Saving..' : 'Add book'}}
+            </button>
+    </form>
+</section>

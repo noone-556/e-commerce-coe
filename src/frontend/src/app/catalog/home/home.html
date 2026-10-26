@@ -1,0 +1,49 @@
+<!-- HOME PAGE template (its logic is in home.ts). Three parts: welcome banner, genre cards, newest books. -->
+
+<!-- 1. Welcome banner. routerLink="/books" = go to the book list without reloading the website. -->
+<section class ="hero">
+    <h1> Find your next favourite book </h1>
+    <p>Laugh, shiver, dream, learn or read along with little ones. Pick a genre to start exploring!</p>
+    <a class="btn btn-primary" routerLink="/books">Browse all books</a>
+</section>
+
+<!--
+  2. One card per genre.
+  The "for" block repeats its content once for every genre in categories() (the signal from home.ts).
+  "track category.id" tells Angular how to recognise each item, so when the list changes,
+  it only redraws the items that really changed.
+  Clicking a card goes to /books?category=horror  ([queryParams] adds the ?category=... part).
+  @let look = ... saves the genre's look in a short name, so we don't call genreLook() again and again.
+  [style.background-color] paints the card in the genre's colour (from genres.ts).
+  [style.background-image] puts the genre picture behind the text (cardImage() in home.ts).
+  [class.has-image] adds the CSS class "has-image" when there is a picture (white text, see home.scss).
+  A genre without a picture shows its emoji instead.
+-->
+<h2>Shop by Genre</h2>
+<div class="genre-grid">
+    @for (category of categories(); track category.id) {
+    @let look = genreLook(category.slug);
+    <a
+        class="genre-card"
+        routerLink="/books"
+        [queryParams]="{category: category.slug}"
+        [class.has-image]="look.image"
+        [style.background-color]="look.color"
+        [style.background-image]="cardImage(look.image)">
+
+        @if (!look.image) {
+            <span class = "emoji" aria-hidden="true" > {{ look.emoji }}</span>
+        }
+        <strong>{{category.name}}</strong>
+        <small>{{category.description}}</small>
+    </a>
+    }
+</div>
+
+<!-- 3. The 4 newest books. Each one is drawn by the BookCard component; [book]="book" gives it the data. -->
+<h2>Fresh on the shelf</h2>
+<div class="book-grid">
+    @for (book of newest(); track book.id) {
+        <app-book-card [book] = "book" />
+    }
+</div>

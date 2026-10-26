@@ -1,0 +1,29 @@
+<!--
+  The whole card is one link.
+  [routerLink]="['/books', book().id]" builds the URL /books/5 (the pieces are joined with "/").
+  Clicking it shows the BookDetail page without reloading the website.
+  book() = read the book input from book-card.ts (inputs are read like signals, with brackets).
+-->
+<a class="card book-card" [routerLink]="['/books', book().id]">
+    <!-- Pass the same book on to the cover component ([book] is BookCover's input) -->
+    <app-book-cover [book]="book()" />
+    <div class="body">
+        <!-- Double curly brackets = print a value as text -->
+        <span class="genre-tag"> {{ book().category.name }} </span>
+        <h3>{{ book().title }}</h3>
+        <p class="author"> {{book().author }} </p>
+        <div class = "bottom">
+            <!--
+              "| currency: 'MYR' : 'RM'" is a PIPE: it formats a value for display.
+              'MYR' = the currency (Malaysian ringgit), 'RM' = the symbol to show. 45.9 becomes RM45.90
+            -->
+            <strong> {{book().price | currency: 'MYR' : 'RM' }}</strong>
+            <!-- Stock badge: 0 copies -> "Sold Out", 1 to 4 copies -> "Only X left", 5 or more -> no badge -->
+            @if (book().stockQuantity === 0) {
+                <span class="stock out">Sold Out</span>
+            } @else if (book().stockQuantity < 5) {
+                <span class="stock low"> Only {{book().stockQuantity }} left</span>
+            }
+        </div>
+    </div>
+</a>

@@ -1,0 +1,97 @@
+<!-- BOOK LIST PAGE template (its logic is in book-list.ts) -->
+
+<!-- The page title, e.g. "Horror" or "All Books" (the heading signal in book-list.ts) -->
+<h1 class="page-title"> {{ heading() }}</h1>
+
+<div class="toolbar">
+    <!--
+      Search form.
+      (submit)="..." runs when the user presses Enter or clicks Search. It does two things:
+        $event.preventDefault()   -> stop the browser's default habit of RELOADING the page when a form is sent
+        search(searchBox.value)   -> call search() in book-list.ts with the text typed in the box
+      #searchBox gives the input a nickname, so we can read searchBox.value.
+      [value]="query().search" puts the current search text in the box (for example after a page refresh).
+    -->
+    <form class="search" (submit)="$event.preventDefault(); search(searchBox.value)">
+        <input #searchBox type="search" placeholder="Search by title or author.." aria-label="Search books" [value]=" query().search"/>
+        <button class="btn btn-primary" type="submit"> Search </button>
+    </form>
+
+    <!--
+      Sort menu.
+      (change) runs when the user picks another option -> chooseSort(...) with the option's value.
+      [selected] marks the option that matches the current sort, so the menu shows the right choice.
+    -->
+    <label class="sort"> Sort by
+        <select #sortBox (change)="chooseSort(sortBox.value)">
+            @for (option of sortOptions; track option.value) {
+                <option [value]="option.value" [selected]="option.value === query().sort"> {{ option.label }}</option>
+            }
+        </select>
+    </label>
+
+</div>
+
+<!--
+  Genre buttons ("chips").
+  [class.active]="..." adds the CSS class "active" only while the condition is true (the chosen genre lights up).
+  (click)="..." runs the method when the button is clicked. "All" sends null, which removes the genre filter.
+  Each genre button shows a small round picture of the genre, or its emoji if it has no picture.
+-->
+<nav class="chips" aria-label="Filter by genre">
+    <button type="button" class="chip" [class.active]="!query().category" (click)="chooseCategory(null)">All</button>
+    @for (category of categories(); track category.id) {
+        <button type="button" class="chip" [class.active]="query().category === category.slug" (click)="chooseCategory(category.slug)">
+            @if (genreLook(category.slug).image; as image) {
+                <img class="chip-icon" [src]="image" alt="" />
+            } @else {
+                {{ genreLook(category.slug).emoji }}
+            }
+            {{ category.name }}
+        </button>
+    }
+</nav>
+
+
+<!--
+  The results. Only ONE of these branches is shown, checked in this order:
+    1. still loading            -> "Loading Books..."
+    2. the request failed       -> error message
+    3. we have a result         -> "result(); as result" = give the value a short name to use inside
+         - 0 books              -> "No books match..."
+         - otherwise            -> the count, the grid of BookCards, and the page buttons
+-->
+@if (loading()) {
+    <p class="muted">Loading Books...</p>
+}@else if (failed()) {
+    <p class="notice error">Sorry, we couldn't load the books.</p>
+}@else if (result(); as result) {
+    @if (result.content.length === 0) {
+        <p class="notice">No books match your search. Try another word of genre</p>
+    } @else {
+        <p class="muted">{{ result.totalElements }} book(s) found</p>
+        <div class="book-grid">
+            @for (book of result.content; track book.id) {
+                <app-book-card [book]="book" />
+            }
+        </div>
+
+
+        <!--
+          Page buttons, only when there is more than 1 page.
+          The backend counts pages from 0, people count from 1, so we show "result.page + 1".
+          [disabled] greys out "Previous" on the first page and "Next" on the last page.
+        -->
+        @if(result.totalPages > 1) {
+            <nav class="pagination" aria-label="Pages">
+                <button class="btn" type="button" [disabled]="result.page === 0" (click)="goToPage(result.page - 1)">
+                    ← Previous
+                </button>
+                <span>Page {{ result.page + 1 }} of {{ result.totalPages }}</span>
+                <button class="btn" type="button" [disabled]="result.page + 1 >= result.totalPages" (click)="goToPage(result.page + 1)">
+                    Next →
+                </button>
+            </nav>
+        }
+    }
+}

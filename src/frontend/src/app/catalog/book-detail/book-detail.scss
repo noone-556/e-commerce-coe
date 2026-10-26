@@ -1,0 +1,39 @@
+.detail {
+  display: grid;
+  grid-template-columns: minmax(200px, 320px) 1fr;
+  gap: 32px;
+  padding: 24px;
+}
+
+// On a phone the layout becomes one column, so keep the cover at a sensible size and centre it
+@media (max-width: 640px) {
+  .detail {
+    grid-template-columns: 1fr;
+  }
+
+  app-book-cover {
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+}
+
+h1 {
+  margin: 8px 0 4px;
+}
+
+.author {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.price {
+  margin: 16px 0 4px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.actions {
+  margin-top: 24px;
+}
