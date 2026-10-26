@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300">
+  <!-- Decoration for the home page banner. The middle is left empty so the heading stays readable. -->
+
+  <!-- Soft dots -->
+  <g fill="#ff7a59" opacity="0.18">
+    <circle cx="330" cy="250" r="6" />
+    <circle cx="880" cy="230" r="5" />
+    <circle cx="140" cy="40" r="4" />
+    <circle cx="1090" cy="40" r="6" />
+  </g>
+
+  <!-- Sparkles -->
+  <g fill="#ffb703" opacity="0.7">
+    <path d="M60 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z" />
+    <path d="M290 40 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" />
+    <path d="M930 50 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 z" />
+    <path d="M1150 100 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" />
+  </g>
+
+  <!-- LEFT: bookshelf -->
+  <rect x="25" y="270" width="270" height="9" rx="4" fill="#d9a77a" />
+
+  <!-- Standing books (spine colour + two light bands) -->
+  <g>
+    <rect x="40" y="130" width="32" height="140" rx="4" fill="#ff7a59" />
+    <rect x="40" y="148" width="32" height="6" fill="#fff" opacity="0.5" />
+    <rect x="40" y="246" width="32" height="6" fill="#fff" opacity="0.5" />
+
+    <rect x="74" y="100" width="26" height="170" rx="4" fill="#9b8cff" />
+    <rect x="74" y="120" width="26" height="5" fill="#fff" opacity="0.5" />
+    <rect x="74" y="248" width="26" height="5" fill="#fff" opacity="0.5" />
+
+    <rect x="102" y="150" width="38" height="120" rx="4" fill="#ffd166" />
+    <rect x="114" y="170" width="14" height="30" rx="3" fill="#fff" opacity="0.55" />
+
+    <rect x="142" y="115" width="28" height="155" rx="4" fill="#6ec6ff" />
+    <rect x="142" y="134" width="28" height="5" fill="#fff" opacity="0.5" />
+    <rect x="142" y="248" width="28" height="5" fill="#fff" opacity="0.5" />
+
+    <!-- Leaning book -->
+    <g transform="translate(176 270) rotate(12)">
+      <rect x="0" y="-150" width="28" height="150" rx="4" fill="#7bd389" />
+      <rect x="0" y="-132" width="28" height="5" fill="#fff" opacity="0.5" />
+      <rect x="0" y="-24" width="28" height="5" fill="#fff" opacity="0.5" />
+    </g>
+  </g>
+
+  <!-- Small pile of books lying flat -->
+  <rect x="222" y="246" width="60" height="24" rx="4" fill="#f4a261" />
+  <rect x="222" y="252" width="60" height="4" fill="#fff" opacity="0.5" />
+  <rect x="226" y="224" width="52" height="22" rx="4" fill="#ff8fab" />
+  <rect x="224" y="204" width="56" height="20" rx="4" fill="#9b8cff" />
+  <rect x="224" y="210" width="56" height="4" fill="#fff" opacity="0.5" />
+
+  <!-- RIGHT: open book -->
+  <path d="M945 258 Q993 246 1040 272 Q1087 246 1135 258 L1135 266 Q1087 254 1040 280 Q993 254 945 266 Z" fill="#ff7a59" />
+  <path d="M1040 266 Q995 242 950 252 L950 196 Q995 186 1040 210 Z" fill="#fff" stroke="#e8cdb5" stroke-width="2" />
+  <path d="M1040 266 Q1085 242 1130 252 L1130 196 Q1085 186 1040 210 Z" fill="#fff" stroke="#e8cdb5" stroke-width="2" />
+  <g stroke="#d8c7b8" stroke-width="3" stroke-linecap="round">
+    <path d="M965 210 Q995 204 1025 218" fill="none" />
+    <path d="M965 224 Q995 218 1025 232" fill="none" />
+    <path d="M965 238 Q990 233 1010 242" fill="none" />
+    <path d="M1055 218 Q1085 204 1115 210" fill="none" />
+    <path d="M1055 232 Q1085 218 1115 224" fill="none" />
+    <path d="M1070 242 Q1090 233 1115 238" fill="none" />
+  </g>
+
+  <!-- Little plant -->
+  <g>
+    <ellipse cx="1166" cy="200" rx="9" ry="22" fill="#7bd389" transform="rotate(-25 1166 200)" />
+    <ellipse cx="1180" cy="196" rx="9" ry="24" fill="#5fbf73" transform="rotate(20 1180 196)" />
+    <ellipse cx="1173" cy="190" rx="8" ry="26" fill="#7bd389" />
+    <path d="M1150 228 L1196 228 L1189 270 L1157 270 Z" fill="#f4a261" />
+    <rect x="1147" y="224" width="52" height="9" rx="4" fill="#e58f4c" />
+  </g>
+</svg>

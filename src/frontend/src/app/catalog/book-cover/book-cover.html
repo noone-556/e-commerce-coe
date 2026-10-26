@@ -1,0 +1,21 @@
+<!--
+  The cover box.
+  [style.background]="look().color" = "property binding": set the CSS background to the genre's colour.
+  Square brackets [ ] mean "the value on the right is TypeScript code, not plain text".
+-->
+<div class="cover" [style.background]="look().color">
+  <!--
+    "if src() has a value (not null), call that value src and show the picture":
+      [src]="src"          the picture path, e.g. /images/books/matilda.jpg
+      [alt]="..."          a text description for screen readers (also shown if the picture can't load)
+      loading="lazy"       the browser waits to download the picture until it is close to the screen
+      (error)="onError()"  round brackets ( ) = "event binding": when the picture FAILS to load,
+                           run onError() in book-cover.ts
+    Otherwise ("else"): show the genre's emoji. aria-hidden="true" = screen readers skip it (it's decoration).
+  -->
+  @if (src(); as src) {
+    <img [src]="src" [alt]="'Cover of ' + book().title" loading="lazy" (error)="onError()" />
+  } @else {
+    <span class="emoji" aria-hidden="true">{{ look().emoji }}</span>
+  }
+</div>

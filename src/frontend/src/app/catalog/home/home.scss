@@ -1,0 +1,69 @@
+.hero {
+  margin: 32px 0;
+  padding: 48px 24px;
+  border-radius: 24px;
+  // Two background layers, the first one listed is drawn on top:
+  //   1. the book illustration (public/images/hero-books.svg), pinned to the bottom.
+  //      "100% auto" = always as wide as the banner (height follows), so the edges are never cut off.
+  //   2. the soft peach-to-yellow gradient underneath it
+  background:
+    url('/images/hero-books.svg') center bottom / 100% auto no-repeat,
+    linear-gradient(135deg, #ffe3d3, #fff1c9);
+  text-align: center;
+}
+
+.hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.hero p {
+  max-width: 560px;
+  margin: 0 auto 24px;
+  color: var(--muted);
+}
+
+h2 {
+  margin: 40px 0 16px;
+}
+
+.genre-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.genre-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  transition: transform 0.15s;
+}
+
+.genre-card:hover {
+  transform: translateY(-4px);
+}
+
+.emoji {
+  font-size: 2.4rem;
+}
+
+// Cards with a picture as their background.
+// background-size: cover = the picture fills the whole card, trimming edges instead of stretching.
+// justify-content: flex-end = push the text to the bottom, where the dark fade is.
+.genre-card.has-image {
+  min-height: 200px;
+  justify-content: flex-end;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.genre-card.has-image strong {
+  font-size: 1.2rem;
+}

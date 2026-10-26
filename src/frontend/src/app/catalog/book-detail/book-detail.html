@@ -1,0 +1,41 @@
+<!--
+  BOOK DETAIL PAGE template (its logic is in book-detail.ts).
+  Only ONE of the three branches is shown, checked in this order:
+    1. the book is loaded   -> "book(); as book" gives the value a short name, then we show the book
+    2. loading failed       -> "We couldn't find that book"
+    3. otherwise            -> still waiting: "Loading...."
+-->
+@if (book(); as book) {
+    <a class="back-link" routerLink="/books">← Back to books</a>
+
+    <!-- Two classes, separated by a space: "card" (white box, from styles.scss) + "detail" (2-column layout, from book-detail.scss) -->
+    <article class="card detail">
+        <!-- The big cover (same BookCover component as on the cards) -->
+        <app-book-cover [book]="book"/>
+
+        <div>
+            <!-- The genre tag is also a link: it opens the list filtered to this genre, e.g. /books?category=horror -->
+            <a class="genre-tag" routerLink="/books" [queryParams]="{ category: book.category.slug }">
+                {{ book.category.name }}
+            </a>
+            <h1> {{ book.title }} </h1>
+            <p class="author">by {{ book.author }}</p>
+            <p> {{ book.description }} </p>
+
+            <!-- The currency pipe formats the price, e.g. 45.9 -> RM 45.90 -->
+            <p class="price">{{ book.price | currency: 'MYR' : 'RM ' }}</p>
+            <!-- "condition ? A : B" means "if the condition is true show A, otherwise show B" -->
+            <p class="muted">{{ book.stockQuantity > 0 ? book.stockQuantity + ' copies in stock ' : 'Sold out' }}</p>
+
+            <!-- (click) runs remove(book) in book-detail.ts -->
+            <div class="actions">
+                <button class="btn btn-danger" type="button" (click)="remove(book)">Delete Book</button>
+            </div>
+        </div>
+    </article>
+
+} @else if (notFound()) {
+    <p class="notice">We couldn't find that book. <a routerLink="/books"> Browse all books </a></p>
+} @else {
+    <p class="muted"> Loading....</p>
+}
