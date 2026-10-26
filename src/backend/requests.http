@@ -1,0 +1,30 @@
+### Create a book
+# To test POST, PUT AND DELETE
+
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "title": "Coraline",
+  "author": "Neil Gaiman",
+  "description": "A girl finds a door to a world that seems better than her own.",
+  "price": 33.90,
+  "stockQuantity": 10,
+  "imageUrl": "/images/books/coraline.jpg",
+  "categoryId": 2
+}
+
+### Validation error (should return 400 with an "errors" map)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{}
+
+### Update
+PUT http://localhost:8080/api/products/26
+Content-Type: application/json
+
+{ "title": "Coraline", "author": "Neil Gaiman", "price": 29.90, "stockQuantity": 8, "categoryId": 2 }
+
+### Delete
+DELETE http://localhost:8080/api/products/26
