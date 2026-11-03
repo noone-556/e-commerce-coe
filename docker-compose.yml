@@ -1,6 +1,17 @@
+# The whole stack: database + backend + frontend.
+# Start it from the repo root with:   docker compose up -d --build
+# (or run setup.ps1 on Windows / setup.sh on Mac and Linux)
+#
+# "profiles" group services so we never run more than the laptop can handle:
+#   core          -> what the app needs to run (this milestone)
+#   queue         -> RabbitMQ (Milestone 3)
+#   observability -> Prometheus, Grafana, Loki (Milestone 4)
+# COMPOSE_PROFILES=core in .env makes a plain "docker compose up" start the core profile.
+
 services:
   postgres:
     image: postgres:17-alpine
+    profiles: [core]
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -11,9 +22,42 @@ services:
       - pgdata:/var/lib/postgresql/data
     mem_limit: 256m
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 5s
       retries: 5
+
+  backend:
+    build: ./src/backend
+    profiles: [core]
+    environment:
+      # Inside Docker the database is not "localhost": it is the service called "postgres"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      # Limit the Java memory (heap) so it fits on an 8 GB laptop
+      JAVA_TOOL_OPTIONS: -Xmx256m
+    depends_on:
+      postgres:
+        condition: service_healthy
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  frontend:
+    build: ./src/frontend
+    profiles: [core]
+    ports:
+      - "8000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    mem_limit: 64m
 
 volumes:
   pgdata:

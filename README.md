@@ -39,6 +39,25 @@ Install these first. Open a **new** terminal after installing so it picks up the
 | VS Code | latest | — |
 
 You don't need to install Maven. The project includes the Maven wrapper (`mvnw`), which downloads the correct version itself.
+## Quick start (Docker only)
+
+You only need Docker Desktop for this. From the repo root:
+
+```powershell
+.\setup.ps1        # Windows
+./setup.sh         # Mac / Linux / Git Bash
+```
+
+Then open **http://localhost:8000**. Stop everything with `docker compose stop`.
+
+| Container | What it runs | Reachable at |
+|---|---|---|
+| frontend | nginx serving the Angular build, forwarding `/api` to the backend | http://localhost:8000 |
+| backend | the Spring Boot jar (heap limited to 256 MB) | only through nginx (`/api/...`) |
+| postgres | PostgreSQL 17, data kept in the `pgdata` volume | localhost:5432 |
+
+After changing code, rebuild with `docker compose up -d --build`.
+The "Running the project" section below is the **development** setup (live reload, debugger).
 
 ### Environment variables (Windows)
 
@@ -100,27 +119,6 @@ Then run `wsl --shutdown` and restart Docker Desktop.
    cd ..\..
    ```
 
-## Running the project
-
-Start Docker Desktop and wait until it shows **Engine running**. Then use three terminals:
-
-| # | Folder | Command | Ready when you see |
-|---|---|---|---|
-| 1 | root | `docker compose up -d postgres` | `docker ps` shows `Up (healthy)` |
-| 2 | `src\backend` | `mvnw spring-boot:run` | `Started BackendApplication` |
-| 3 | `src\frontend` | `ng serve` | `Local: http://localhost:4200/` |
-
-The first backend run takes a few minutes while Maven downloads its dependencies. Flyway applies the migrations in `db/migration` automatically on startup.
-
-### Check that it works
-
-- Frontend: http://localhost:4200
-- Backend health: http://localhost:8080/actuator/health should return `{"status":"UP"}`
-
-### Stopping
-
-- Press **Ctrl+C** in the backend and frontend terminals.
-- Run `docker compose stop` in the root. Your data is kept in the `pgdata` volume.
 
 ## Database
 
