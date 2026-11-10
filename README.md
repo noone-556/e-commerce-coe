@@ -109,8 +109,6 @@ Then run `wsl --shutdown` and restart Docker Desktop.
    DB_PASSWORD=
    ```
 
-   The backend falls back to `coe` / `coe` / `coe` when these variables aren't set, so keep the same values for local development. If you change them, set the same environment variables for the backend too.
-
 3. **Install the frontend dependencies:**
 
    ```cmd
